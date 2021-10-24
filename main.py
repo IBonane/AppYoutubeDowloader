@@ -10,7 +10,7 @@ window.geometry('600x350')
 
 window.resizable(0,0)
 
-window.title('Djimbalinux Dowloader')
+window.title('Djimbalinux Downloader')
 
 Label(window, text="Télécharger vidéo Youtube", font=("arial", 20, "bold")).pack()
 
@@ -27,19 +27,24 @@ ttk.Button(window, text="choisir le dossier", command=getFolderPath).place(x=240
 
 link = StringVar()
 
-Label(window, text="Coler le lien ici : ", font='arial 20 bold').place(x=200, y=60)
+Label(window, text="Coler le lien ici ⬇️ ", font='arial 20 bold').place(x=200, y=60)
 
 link_entered = Entry(window, width=70, textvariable=link).place(x=15, y=90)
 
+Label(window, text="le téléchargement peut prendre quelques minutes, veillez patienter lors de ce dernier...").place(x=10, y=300)
 
 def downloader(extension="mp4"):
-    url = YouTube(str(link.get()))
-    video = url.streams.filter(progressive=True, file_extension=extension).order_by('resolution').desc().first()
-    video.download()
-    video.download(folderPath.get())
+    try:
+        url = YouTube(str(link.get()))
+        video = url.streams.filter(progressive=True, file_extension=extension).order_by('resolution').desc().first()
+        video.download()
+        video.download(folderPath.get())
 
-    # Displaying the message
-    messagebox.showinfo("téléchargement terminé !", "vidéo sauvegardée dans\n" + folderPath.get())
+        # Displaying the message
+        messagebox.showinfo("téléchargement terminé !", "vidéo sauvegardée dans\n" + folderPath.get())
+
+    except:
+        messagebox.showinfo("échec !", "verifié votre lien youtube")
 
 Button(window, text="Télécharger", font='arial 15 bold', bg='orange', padx=5, command=downloader).place(x=235, y=230)
 
